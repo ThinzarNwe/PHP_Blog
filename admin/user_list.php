@@ -2,15 +2,15 @@
 session_start();
 require '../config/config.php';
 
-if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
+if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
   header('Location: login.php');
 }
 
-if ($_SESSION['role'] != 1) {
+if($_SESSION['role'] != 1) {
   header('Location: login.php');
 }
 
-if ($_POST) {
+if($_POST) {
   setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
 }else{
   if (empty($_GET['pageno'])) {
@@ -30,7 +30,7 @@ if ($_POST) {
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">user Listings</h3>
+                <h3 class="card-title">User Listing</h3>
               </div>
               <?php
                 if (!empty($_GET['pageno'])) {
@@ -42,7 +42,7 @@ if ($_POST) {
                 $numOfrecs = 5;
                 $offset = ($pageno - 1) * $numOfrecs;
 
-                if (empty($_POST['search']) && empty($_COOKIE['search'])) {
+                if(empty($_POST['search']) && empty($_COOKIE['search'])) {
                   $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
                   $stmt->execute();
                   $rawResult = $stmt->fetchAll();
