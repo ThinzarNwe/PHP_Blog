@@ -6,44 +6,14 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
   header('Location: login.php');
 }
 
-                if (!empty($_GET['pageno'])){
-                  $pageno = $_GET['pageno'];
-                }else{
-                  $pageno = 1;
-                }
-                $numOfrecs = 6;
-                $offset = ($pageno - 1)* $numOfrecs;
 
-               if(empty($_POST['search'])) {
-                  $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
-                  $stmt->execute();
-                  $rawResult = $stmt->fetchAll();
-                  $total_pages = ceil(count($rawResult) / $numOfrecs);
-
-                  $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
-                  $stmt->execute();
-                  $result = $stmt->fetchAll();
-               }else{
-                  $searchKey = $_POST['search'];
-                  $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%searchKey' ORDER BY id DESC");
-                  $stmt->execute();
-                  $result = $stmt->fetchAll();
-
-                  $total_pages = ceil(count($result) / $numOfrecs);
-
-                  $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
-                  $stmt->execute();
-                  $result = $stmt->fetchAll();
-               }
-
-               
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Widgets</title>
+  <title>Blog</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -59,18 +29,41 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
 <div class="wrapper">
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="">
+  <div class="content-wrapper" style="margin-left: 0px !important">
     <!-- Content Header (Page header) -->
     <section class="content-header" >
+      
       <div class="container-fluid">
-       <h1 style="text-align: center;">Widgets</h1>
+       <h1 style="text-align: center;">CODE BLOG</h1>
+
+       <div class="row">
+        <div class="col-lg-12">
+          <img src="admin/images/banner3.jpg" class="img-fluid w-100 my-4">
+        </div>
+      </div>
       </div><!-- /.container-fluid -->
     </section>
-    <?php   
-      $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
-      $stmt->execute();
-      $result = $stmt->fetchAll();
-    ?>
+        <?php
+          if (!empty($_GET['pageno'])) {
+            $pageno = $_GET['pageno'];
+          }else{
+            $pageno = 1;
+          }
+
+          $numOfrecs = 6;
+          $offset = ($pageno - 1) * $numOfrecs;
+
+          $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+          $stmt->execute();
+          $rawResult = $stmt->fetchAll();
+
+          $total_pages = ceil(count($rawResult) / $numOfrecs);
+
+          $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+          $stmt->execute();
+          $result = $stmt->fetchAll();
+
+        ?>
     <!-- Main content -->
     <section class="content">
        <div class="row">
@@ -100,18 +93,20 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                     }
                   }
                   ?>
-          
         </div>
-    </section>
-     <nav aria-label="Page navigation example" style="float: right;">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
-          <li class="page-item <?php if($pageno <= 1){echo 'disabled';} ?>"><a class="page-link" href="<?php if($pageno <= 1){echo'#';}else{echo "?pageno=".($pageno-1);} ?>">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-          <li class="page-item <?php if($pageno >= $total_pages){echo 'disable';} ?> "><a class="page-link" href="<?php if($pageno >= $total_pages){echo '#';}else{echo"?pageno=".($pageno+1);} ?>">Next</a></li>
-          <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages?>">Last</a></li>
-        </ul>
+        <div class="row" style="float:right;margin-right: 0px">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
+              <li class="page-item <?php if($pageno <= 1){echo 'disabled';} ?>"><a class="page-link" href="<?php if($pageno <= 1){echo'#';}else{echo "?pageno=".($pageno-1);} ?>">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
+              <li class="page-item <?php if($pageno >= $total_pages){echo 'disable';} ?> "><a class="page-link" href="<?php if($pageno >= $total_pages){echo '#';}else{echo"?pageno=".($pageno+1);} ?>">Next</a></li>
+              <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages?>">Last</a></li>
+            </ul>
       </nav>
+    </div> <br><br>
+    </section>
+
     <!-- /.content -->
 
     <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">

@@ -17,11 +17,15 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
   $stmtcmt->execute();
   $cmResult = $stmtcmt->fetchAll();
 
-  $authorId = $cmResult[0]['author_id']; 
-  $stmtau = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
-  $stmtau->execute();
-  $auResult = $stmtau->fetchAll();
- 
+  $auResult = [];
+  if($cmResult){
+    foreach ($cmResult as $key => $value) {
+      $authorId = $cmResult[0]['author_id']; 
+      $stmtau = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
+      $stmtau->execute();
+      $auResult[] = $stmtau->fetchAll();
+    }
+ }
   if($_POST){
     $comment = $_POST['comment'];
     $stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
@@ -73,7 +77,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-               <img src="admin/images/<?php echo $result[0]['image'] ?>"class="container-fluid" style="height: 850px !important;">
+               <img src="admin/images/<?php echo $result[0]['image'] ?>"class="container-fluid py-3" style="height: 850px !important;">
 
                 <p><?php echo $result[0]['content'] ?></p>   
                 <h3>Comments</h3>   
@@ -82,14 +86,22 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
               <!-- /.card-body -->
               <div class="card-footer card-comments">
                 <div class="card-comment">
-
-                  <div class="comment-text" style="margin-left: 0px !important">
-                    <span class="username">
-                      <?php   echo $auResult[0]['name']; ?>
-                      <span class="text-muted float-right"><?php   echo $cmResult[0]['created_id']; ?></span>
-                    </span><!-- /.username -->
-                    <?php   echo $cmResult[0]['content']; ?>
+                  <?php if($cmResult) { ?>
+                  <div class="comment-text" style="margin-left:0px !important">
+                    <?php foreach ($cmResult as $key => $value) { ?>
+                      <span class="username">
+                        <?php print_r($auResult[$key][0]['name']); ?>
+                      <span class="text-muted float-right"><?php   echo $value['created_id']; ?></span>
+                    </span>
+                   <!-- /.username -->
+                    <?php echo $value['content']; ?><br>
+                    <?php
+                     }
+                    ?>
                   </div>
+                  <?php
+                  }
+                  ?>
                   <!-- /.comment-text -->
                 </div>
                 
