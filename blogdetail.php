@@ -122,7 +122,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
         </div>
     </section>
 
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" style="float:right;margin-right: 0px">
   <ul class="pagination">
     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
     <li class="page-item"><a class="page-link" href="#">1</a></li>
