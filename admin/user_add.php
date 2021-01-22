@@ -10,6 +10,21 @@ if($_SESSION['role']!=1) {
 }
 
 if($_POST) {
+  if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4) {
+    if(empty($_POST['name'])){
+      $nameError = 'Name cannot be null';
+    }
+
+     if(empty($_POST['email'])){
+      $emailError = 'Email cannot be null';
+    }
+
+     if(empty($_POST['password'])){
+      $passwordError = 'Password cannot be null';
+    }if(strlen($_POST['password']) < 4){
+      $passwordError = 'Password shoud be 4 characters  at least';
+    }
+  }else{
 
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -40,6 +55,8 @@ if($_POST) {
     }
   }
 
+  }
+
 
 ?>
 
@@ -55,15 +72,15 @@ if($_POST) {
                 <form class="" action="user_add.php" method="post" enctype="multipart/form-data">
 
                   <div class="form-group">
-                    <label for="">Name</label><br>  
+                    <label for="">Name</label><p class="text-danger"><?php echo empty($nameError) ? '' : '*'. $nameError ?></p> 
                     <input type="text" class="form-control" name="name" value="" >
                   </div>
                   <div class="form-group">
-                    <label for="">Email</label><br> 
+                    <label for="">Email</label><p class="text-danger"><?php echo empty($emailError) ? '' : '*'. $emailError ?></p> 
                     <input type="email" class="form-control" name="email" value="">
                   </div>
                   <div class="form-group">
-                    <label for="">Password</label>
+                    <label for="">Password</label><p class="text-danger"><?php echo empty($passwordError) ? '' : '*'. $passwordError ?></p>
                     <input type="password" name="password" class="form-control">
                   </div>
                   <div class="form-group">

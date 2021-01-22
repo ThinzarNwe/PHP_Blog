@@ -27,15 +27,23 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     }
  }
   if($_POST){
-    $comment = $_POST['comment'];
-    $stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
-    $result = $stmt->execute(
-      array(':content'=>$comment,':author_id'=>$_SESSION['user_id'],':post_id'=>$blogID)
-        );
-        if($result){
-          header('Location: blogdetail.php?id='.$blogID);
-        
+
+    if(empty($_POST['comment'])) {
+    if(empty($_POST['title'])){
+      $cmtError = 'Comment cannot be null';
     }
+
+  }else{
+
+      $comment = $_POST['comment'];
+      $stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
+      $result = $stmt->execute(
+      array(':content'=>$comment,':author_id'=>$_SESSION['user_id'],':post_id'=>$blogID)
+      );
+      if($result){
+        header('Location: blogdetail.php?id='.$blogID);    
+    }
+  }
   }
 ?>
 <!DOCTYPE html>
@@ -111,6 +119,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                 <form action="" method="post">
                   <!-- .img-push is used to add margin to elements next to floating images -->
                   <div class="img-push">
+                    <p class="text-danger"><?php echo empty($cmtError) ? '' : '*'. $cmtError ?></p>
                     <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">
                   </div>
                 </form>

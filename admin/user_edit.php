@@ -11,6 +11,18 @@ if($_SESSION['role'] != 1){
 }
 
 if($_POST){
+  if(empty($_POST['name']) || empty($_POST['email'])) {
+    if(empty($_POST['name'])){
+      $nameError = 'Name cannot be null';
+    }
+
+     if(empty($_POST['email'])){
+      $emailError = 'Email cannot be null';
+    }
+  }elseif( !empty($_POST['password']) && strlen($_POST['password']) < 4){
+    $passwordError = 'Password should be 4 characters at least';
+  }
+else{
     $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -35,6 +47,8 @@ if($_POST){
       }
     
   }
+  }
+
 }
 
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id=".$_GET['id']);
@@ -56,15 +70,16 @@ $result = $stmt->fetchAll();
 
                   <div class="form-group">
                     <input type="hidden" name="id" value="<?php echo $result[0]['id']?>">
-                    <label for="">Name</label>
+                    <label for="">Name</label><p class="text-danger"><?php echo empty($nameError) ? '' : '*'. $nameError ?></p> 
                     <input type="text" class="form-control" name="name" value="<?php echo $result[0]['name'] ?>">
                   </div>
                   <div class="form-group">
-                    <label for="">Email</label>
+                    <label for="">Email</label><p class="text-danger"><?php echo empty($emailError) ? '' : '*'. $emailError ?></p> 
                     <input type="email" class="form-control" name="email" value="<?php echo $result[0]['email'] ?>">
                   </div>
                   <div class="form-group">
-                    <label for="">Password</label>
+                    <label for="">Password</label><p class="text-danger"><?php echo empty($passwordError) ? '' : '*'. $passwordError ?></p> 
+                    <span style="font-style: 5px;">Password already exit.</span>
                     <input type="password" name="password" class="form-control" value="<?php echo $result[0]['password'] ?>">
                   </div>
                   <div class="form-group">

@@ -12,7 +12,21 @@ if ($_SESSION['role'] != 1) {
 }
 
 if ($_POST) {
-  $file = 'images/'.($_FILES['image']['name']);
+
+  if(empty($_POST['title']) || empty($_POST['content']) || empty($_FILES['image'])) {
+    if(empty($_POST['title'])){
+      $titleError = 'Title cannot be null';
+    }
+
+     if(empty($_POST['content'])){
+      $contentError = 'Content cannot be null';
+    }
+
+     if(empty($_FILES['image'])){
+      $imageError = 'Image cannot be null';
+    }
+  }else{
+     $file = 'images/'.($_FILES['image']['name']);
   $imageType = pathinfo($file,PATHINFO_EXTENSION);
 
   if ($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg') {
@@ -31,6 +45,8 @@ if ($_POST) {
         echo "<script>alert('Successfully added');window.location.href='index.php';</script>";
     }
   }
+  }
+ 
 }
 ?>
 
@@ -45,18 +61,18 @@ if ($_POST) {
               <div class="card-body">
                 <form class="" action="add.php" method="post" enctype="multipart/form-data">
                   <div class="form-group">
-                    <label for="">Title</label>
-                    <input type="text" class="form-control" name="title" value="" required="">
+                    <label for="">Title</label> <p class="text-danger"><?php echo empty($titleError) ? '' : '*'. $titleError ?></p>
+                    <input type="text" class="form-control" name="title" value="">
                   </div>
 
                   <div class="form-group">
-                    <label for="">Content</label><br>
+                    <label for="">Content</label><p class="text-danger"><?php echo empty($contentError) ? '' : '*'. $contentError ?></p>
                     <textarea class="form-control" name="content" rows="8" cols="80"></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="">Image</label><br>
-                    <input type="file" name="image" value="" required="">
+                    <label for="">Image</label><p class="text-danger"><?php echo empty($imageError) ? '' : '*'. $imageError ?></p>
+                    <input type="file" name="image" value="">
                   </div>
 
                   <div class="form-group">
