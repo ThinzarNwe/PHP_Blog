@@ -81,7 +81,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
               <div class="card-header">
                 <!-- /.user-block -->
                 <div style="text-align: center; !important;float:none;" class="card-title">
-                  <h4><?php echo $result[0]['title'] ?></h4>
+                  <h4><?php echo escape($result[0]['title']) ?></h4>
                 </div>
                 <!-- /.card-tools -->
               </div>
@@ -89,7 +89,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
               <div class="card-body">
                <img src="admin/images/<?php echo $result[0]['image'] ?>"class="container-fluid py-3" style="height: 850px !important;">
 
-                <p><?php echo $result[0]['content'] ?></p>   
+                <p><?php echo escape($result[0]['content'] )?></p>   
                 <h3>Comments</h3>   
                 <a href="/admin" type="button" class="btn btn-default">Go Back</a>
               </div>
@@ -100,11 +100,11 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
                   <div class="comment-text" style="margin-left:0px !important">
                     <?php foreach ($cmResult as $key => $value) { ?>
                       <span class="username">
-                        <?php print_r($auResult[$key][0]['name']); ?>
-                      <span class="text-muted float-right"><?php   echo $value['created_id']; ?></span>
+                        <?php echo escape($auResult[$key][0]['name']); ?>
+                      <span class="text-muted float-right"><?php   echo escape( $value['created_id']); ?></span>
                     </span>
                    <!-- /.username -->
-                    <?php echo $value['content']; ?><br>
+                    <?php echo escape($value['content']); ?><br>
                     <?php
                      }
                     ?>
